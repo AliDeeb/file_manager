@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swipeable_page_route/swipeable_page_route.dart';
 
+import '../../features/home/view/folder_file/folder_file_view.dart';
 import '../../features/home/view/home/home_view.dart';
 import '../common/app_config.dart';
 import '../constants/enum/route_type.dart';
@@ -17,6 +18,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getRoute<HomeViewParam>(
         settings: settings,
         createScreen: (param) => HomeView(param: param),
+      );
+    case FolderFileView.routeName:
+      return _getRoute<FolderFileViewParam>(
+        settings: settings,
+        createScreen: (param) => FolderFileView(param: param),
       );
     default:
       // If there is no such named route in the switch statement, e.g. /third

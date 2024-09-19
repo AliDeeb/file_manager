@@ -20,9 +20,12 @@ class ExternalStorageHandler {
     final isGranted = await requestStoragePermssion();
 
     if (isGranted) {
-      final root =
-          (await getExternalStorageDirectory())?.uri.pathSegments.first;
-      _rootPath = root != null ? "/$root/" : null;
+      final root = (await getExternalStorageDirectory())
+          ?.uri
+          .pathSegments
+          .getRange(0, 3)
+          .join("/");
+      _rootPath = root;
       return _rootPath;
     } else {
       await showDialog(
@@ -45,9 +48,12 @@ class ExternalStorageHandler {
       );
 
       if (await requestStoragePermssion()) {
-        final root =
-            (await getExternalStorageDirectory())?.uri.pathSegments.first;
-        _rootPath = root != null ? "/$root/" : null;
+        final root = (await getExternalStorageDirectory())
+            ?.uri
+            .pathSegments
+            .getRange(0, 3)
+            .join("/");
+        _rootPath = root;
         return _rootPath;
       }
     }

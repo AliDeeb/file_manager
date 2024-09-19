@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/common/external_storage_handler.dart';
+import '../../../../core/navigation/nav.dart';
 import '../../../../core/theme/text_theme_styles.dart';
 import '../../view_model/home_view_model.dart';
+import '../folder_file/folder_file_view.dart';
 
 class HomeContentView extends StatefulWidget {
   const HomeContentView({super.key});
@@ -33,18 +35,28 @@ class _HomeContentViewState extends State<HomeContentView> {
         mainAxisSpacing: 10,
       ),
       itemBuilder: (context, index) {
-        return Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.amber,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Text(
-            vm.rootFoldersAndFiles[index].path,
-            style: TextThemeStyles.text_14_Regular.copyWith(
-              color: Colors.white,
+        return InkWell(
+          onTap: () {
+            Nav.to(
+              FolderFileView.routeName,
+              arguments: FolderFileViewParam(
+                path: vm.rootFoldersAndFiles[index].path,
+              ),
+            );
+          },
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.circular(10),
             ),
-            textAlign: TextAlign.center,
+            child: Text(
+              vm.rootFoldersAndFiles[index].path.split("/").last,
+              style: TextThemeStyles.text_14_Regular.copyWith(
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
         );
       },
