@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/common/external_storage_handler.dart';
 import '../../../../core/navigation/nav.dart';
 import '../../../../core/theme/text_theme_styles.dart';
 import '../../view_model/folder_file_view_model.dart';
@@ -38,7 +39,7 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
         Expanded(
           child: GridView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            itemCount: vm.rootFoldersAndFiles.length,
+            itemCount: vm.foldersAndFiles.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               crossAxisSpacing: 10,
@@ -47,12 +48,15 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  Nav.to(
-                    FolderFileView.routeName,
-                    arguments: FolderFileViewParam(
-                      path: vm.rootFoldersAndFiles[index].path,
-                    ),
-                  );
+                  if (ExternalStorageHandler.canOpenDirectory(
+                      vm.foldersAndFiles[index].path)) {
+                    Nav.to(
+                      FolderFileView.routeName,
+                      arguments: FolderFileViewParam(
+                        path: vm.foldersAndFiles[index].path,
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -61,7 +65,7 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    vm.rootFoldersAndFiles[index].path.split("/").last,
+                    vm.foldersAndFiles[index].path.split("/").last,
                     style: TextThemeStyles.text_14_Regular.copyWith(
                       color: Colors.white,
                     ),

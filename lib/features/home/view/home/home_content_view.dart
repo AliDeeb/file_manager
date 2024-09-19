@@ -39,12 +39,15 @@ class _HomeContentViewState extends State<HomeContentView> {
         itemBuilder: (context, index) {
           return InkWell(
             onTap: () {
-              Nav.to(
-                FolderFileView.routeName,
-                arguments: FolderFileViewParam(
-                  path: vm.rootFoldersAndFiles[index].path,
-                ),
-              );
+              if (ExternalStorageHandler.canOpenDirectory(
+                  vm.rootFoldersAndFiles[index].path)) {
+                Nav.to(
+                  FolderFileView.routeName,
+                  arguments: FolderFileViewParam(
+                    path: vm.rootFoldersAndFiles[index].path,
+                  ),
+                );
+              }
             },
             child: Container(
               alignment: Alignment.center,

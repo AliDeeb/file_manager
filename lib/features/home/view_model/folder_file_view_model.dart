@@ -6,10 +6,10 @@ import '../view/folder_file/folder_file_view.dart';
 
 class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
   FolderFileViewModel(super.param) {
-    rootFoldersAndFiles = ExternalStorageHandler.getFoldersAndFiles(param.path);
+    foldersAndFiles = ExternalStorageHandler.getFoldersAndFiles(param.path);
   }
 
-  List<FileSystemEntity> rootFoldersAndFiles = [];
+  List<FileSystemEntity> foldersAndFiles = [];
 
   @override
   void closeModel() {

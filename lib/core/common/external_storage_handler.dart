@@ -68,4 +68,13 @@ class ExternalStorageHandler {
     if (_rootPath == null) return [];
     return Directory(_rootPath!).listSync();
   }
+
+  static bool canOpenDirectory(String path) {
+    try {
+      Directory(path).listSync();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
