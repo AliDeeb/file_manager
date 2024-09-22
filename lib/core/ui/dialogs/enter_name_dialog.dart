@@ -7,6 +7,7 @@ import '../../theme/text_theme_styles.dart';
 
 Future<String?> showEnterNameDialog(
   String title, {
+  bool preventSpecialCharacter = false,
   String? initData,
   int? maxLines,
 }) {
@@ -16,6 +17,7 @@ Future<String?> showEnterNameDialog(
       title: title,
       initData: initData,
       maxLines: maxLines,
+      preventSpecialCharacter: preventSpecialCharacter,
     ),
   );
 }
@@ -26,10 +28,12 @@ class EnterNameDialog extends StatefulWidget {
     required this.title,
     required this.maxLines,
     required this.initData,
+    required this.preventSpecialCharacter,
   });
   final String title;
   final int? maxLines;
   final String? initData;
+  final bool preventSpecialCharacter;
 
   @override
   State<EnterNameDialog> createState() => _EnterNameDialogState();
@@ -38,6 +42,7 @@ class EnterNameDialog extends StatefulWidget {
 class _EnterNameDialogState extends State<EnterNameDialog> {
   final _controller = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final specialCharacters = ["<", ">", ":", "/", "\\", "|", "?", "*"];
 
   @override
   void initState() {
@@ -66,9 +71,14 @@ class _EnterNameDialogState extends State<EnterNameDialog> {
               TextFormField(
                 maxLines: widget.maxLines,
                 controller: _controller,
+                onChanged: (value) => formKey.currentState?.validate(),
                 validator: (value) {
-                  if (value != null && value.isNotEmpty) return null;
-                  return "Required";
+                  if (value != null && value.isEmpty) return "Required";
+                  if (widget.preventSpecialCharacter &&
+                      value!.contains(RegExp(r"<|>|:|/|\\|\||\?|\*"))) {
+                    return "Not allowed use [${specialCharacters.join(" ")}]";
+                  }
+                  return null;
                 },
               ),
               50.verticalSpace,

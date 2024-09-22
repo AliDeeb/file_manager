@@ -56,7 +56,10 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
   }
 
   void onAddFolderTap() async {
-    final folderName = await showEnterNameDialog("Enter folder name:");
+    final folderName = await showEnterNameDialog(
+      "Enter folder name:",
+      preventSpecialCharacter: true,
+    );
     if (folderName != null) {
       final success =
           ExternalStorageHandler.createFolder(param.path, folderName);
@@ -67,7 +70,10 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
   }
 
   void onAddFileTap() async {
-    final fileName = await showEnterNameDialog("Enter file name:");
+    final fileName = await showEnterNameDialog(
+      "Enter file name:",
+      preventSpecialCharacter: true,
+    );
     if (fileName != null) {
       final success = ExternalStorageHandler.createFile(param.path, fileName);
       if (success) {
