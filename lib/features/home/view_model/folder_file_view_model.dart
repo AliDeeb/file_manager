@@ -22,7 +22,7 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
     notifyListeners();
   }
 
-  void onFolderFileTap(index) {
+  void onFolderFileTap(index) async {
     bool isDirectory = foldersAndFiles[index].statSync().type ==
         FileSystemEntityType.directory;
 
@@ -36,7 +36,16 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
     } else {
       bool isTextFile = foldersAndFiles[index].path.contains(".txt");
       if (isTextFile) {
-        print("text file");
+        final file = File(foldersAndFiles[index].path);
+        final data = file.readAsStringSync();
+        final content = await showEnterNameDialog(
+          "",
+          initData: data,
+          maxLines: 5,
+        );
+        if (content != null) {
+          file.writeAsString(content);
+        }
       }
     }
   }

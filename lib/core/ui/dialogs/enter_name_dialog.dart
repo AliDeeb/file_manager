@@ -5,16 +5,31 @@ import '../../common/app_config.dart';
 import '../../navigation/nav.dart';
 import '../../theme/text_theme_styles.dart';
 
-Future<String?> showEnterNameDialog(String title) {
+Future<String?> showEnterNameDialog(
+  String title, {
+  String? initData,
+  int? maxLines,
+}) {
   return showDialog<String?>(
     context: AppConfig.appNavigatorKey.currentContext!,
-    builder: (context) => EnterNameDialog(title: title),
+    builder: (context) => EnterNameDialog(
+      title: title,
+      initData: initData,
+      maxLines: maxLines,
+    ),
   );
 }
 
 class EnterNameDialog extends StatefulWidget {
-  const EnterNameDialog({super.key, required this.title});
+  const EnterNameDialog({
+    super.key,
+    required this.title,
+    required this.maxLines,
+    required this.initData,
+  });
   final String title;
+  final int? maxLines;
+  final String? initData;
 
   @override
   State<EnterNameDialog> createState() => _EnterNameDialogState();
@@ -25,9 +40,17 @@ class _EnterNameDialogState extends State<EnterNameDialog> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.initData != null) {
+      _controller.text = widget.initData!;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 50.h),
         child: Form(
           key: formKey,
@@ -41,6 +64,7 @@ class _EnterNameDialogState extends State<EnterNameDialog> {
                 ),
               ),
               TextFormField(
+                maxLines: widget.maxLines,
                 controller: _controller,
                 validator: (value) {
                   if (value != null && value.isNotEmpty) return null;
