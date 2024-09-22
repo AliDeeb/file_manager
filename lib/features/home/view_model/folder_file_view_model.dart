@@ -12,9 +12,14 @@ import '../view/folder_file/folder_file_view.dart';
 class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
   FolderFileViewModel(super.param) {
     foldersAndFiles = ExternalStorageHandler.getFoldersAndFiles(param.path);
+    foldersAndFilesCopy = [...foldersAndFiles];
   }
 
   List<FileSystemEntity> foldersAndFiles = [];
+  List<FileSystemEntity> foldersAndFilesCopy = [];
+  FilterTypes? _selectedFilter;
+
+  FilterTypes? get selectedFilter => _selectedFilter;
 
   // methods
   void refreshFoldersAndFiles() {
@@ -134,7 +139,29 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
     }
   }
 
-  void onFilterSelected(FilterTypes value) {}
+  void onFilterSelected(FilterTypes value) {
+    if (_selectedFilter == value) {
+      _selectedFilter = null;
+      foldersAndFiles = [...foldersAndFilesCopy];
+      notifyListeners();
+      return;
+    }
+
+    foldersAndFiles = [...foldersAndFilesCopy];
+    switch (value) {
+      case FilterTypes.textFiles:
+        _selectedFilter = value;
+        foldersAndFiles =
+            foldersAndFiles.where((e) => e.path.contains(".txt")).toList();
+        notifyListeners();
+      case FilterTypes.images:
+        _selectedFilter = value;
+        foldersAndFiles = foldersAndFiles
+            .where((e) => e.path.contains(RegExp(r"[\w|_|-]+.png|jpg|jpeg")))
+            .toList();
+        notifyListeners();
+    }
+  }
 
   @override
   void closeModel() {

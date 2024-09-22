@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/enum/filter_types.dart';
 import '../../../../core/constants/enum/sort_types.dart';
+import '../../../../core/theme/text_theme_styles.dart';
 import '../../../../core/ui/screens/base_view.dart';
 import '../../../../core/ui/widgets/custom_scaffold.dart';
 import '../../view_model/folder_file_view_model.dart';
@@ -45,13 +46,27 @@ class _FolderFileViewState extends State<FolderFileView> {
               onSelected: vm.onFilterSelected,
               itemBuilder: (context) {
                 return [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: FilterTypes.images,
-                    child: Text("Images"),
+                    child: Text(
+                      "Images",
+                      style: TextThemeStyles.text_14_Regular.copyWith(
+                        color: vm.selectedFilter == FilterTypes.images
+                            ? Colors.green
+                            : Colors.black,
+                      ),
+                    ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: FilterTypes.textFiles,
-                    child: Text("Text Files"),
+                    child: Text(
+                      "Text Files",
+                      style: TextThemeStyles.text_14_Regular.copyWith(
+                        color: vm.selectedFilter == FilterTypes.textFiles
+                            ? Colors.green
+                            : Colors.black,
+                      ),
+                    ),
                   ),
                 ];
               },
