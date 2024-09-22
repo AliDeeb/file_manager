@@ -44,14 +44,16 @@ class _HomeViewState extends State<HomeView> {
             body: FutureBuilder<String?>(
               future: future,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData ||
+                    snapshot.connectionState == ConnectionState.done) {
                   return snapshot.data != null
                       ? FolderFileView(
                           param: FolderFileViewParam(
                             path: ExternalStorageHandler.rootPath!,
                           ),
                         )
-                      : const Center(child: Text("permission denied"));
+                      : const Center(
+                          child: Text("Storage permission is denied"));
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }

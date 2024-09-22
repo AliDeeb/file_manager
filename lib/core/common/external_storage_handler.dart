@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../navigation/nav.dart';
+import '../theme/text_theme_styles.dart';
 import '../ui/show_toast.dart';
 import 'app_config.dart';
 
@@ -30,10 +31,14 @@ class ExternalStorageHandler {
       return _rootPath;
     } else {
       await showDialog(
+        barrierDismissible: false,
         context: AppConfig.appNavigatorKey.currentContext!,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Allow to access to external storage"),
+            title: Text(
+              "File manager app need to access to external storage",
+              style: TextThemeStyles.text_18_Regular,
+            ),
             actions: [
               const TextButton(onPressed: Nav.pop, child: Text("cancel")),
               FilledButton(
@@ -41,7 +46,7 @@ class ExternalStorageHandler {
                   await openAppSettings();
                   Nav.pop();
                 },
-                child: const Text("openAppSettings"),
+                child: const Text("Open app settings"),
               ),
             ],
           );
