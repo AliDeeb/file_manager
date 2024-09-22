@@ -22,8 +22,27 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
     notifyListeners();
   }
 
+  void onFolderFileTap(index) {
+    bool isDirectory = foldersAndFiles[index].statSync().type ==
+        FileSystemEntityType.directory;
+
+    if (isDirectory) {
+      Nav.to(
+        FolderFileView.routeName,
+        arguments: FolderFileViewParam(
+          path: foldersAndFiles[index].path,
+        ),
+      );
+    } else {
+      bool isTextFile = foldersAndFiles[index].path.contains(".txt");
+      if (isTextFile) {
+        print("text file");
+      }
+    }
+  }
+
   void onAddFolderTap() async {
-    final folderName = await showEnterNameDialog();
+    final folderName = await showEnterNameDialog("Enter folder name:");
     if (folderName != null) {
       final success =
           ExternalStorageHandler.createFolder(param.path, folderName);
@@ -33,14 +52,31 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
     }
   }
 
-  void onDeleteFolderTap(int index) {
+  void onAddFileTap() async {
+    final fileName = await showEnterNameDialog("Enter file name:");
+    if (fileName != null) {
+      final success = ExternalStorageHandler.createFile(param.path, fileName);
+      if (success) {
+        refreshFoldersAndFiles();
+      }
+    }
+  }
+
+  void onDeleteTap(int index) {
     showConfirmDialog(
       "Are you sure to delete this folder",
       () {
         Nav.pop();
-        final success = ExternalStorageHandler.deleteFolder(
-          foldersAndFiles[index].path,
-        );
+        bool isDirectory = foldersAndFiles[index].statSync().type ==
+            FileSystemEntityType.directory;
+
+        final success = isDirectory
+            ? ExternalStorageHandler.deleteFolder(
+                foldersAndFiles[index].path,
+              )
+            : ExternalStorageHandler.deleteFile(
+                foldersAndFiles[index].path,
+              );
         if (success) {
           refreshFoldersAndFiles();
         }

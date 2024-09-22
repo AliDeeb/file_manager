@@ -3,12 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/common/external_storage_handler.dart';
-import '../../../../core/navigation/nav.dart';
 import '../../../../core/theme/text_theme_styles.dart';
 import '../../../../core/ui/dialogs/folder_file_details_dialog.dart';
 import '../../view_model/folder_file_view_model.dart';
-import 'folder_file_view.dart';
 
 class FolderFileContentView extends StatefulWidget {
   const FolderFileContentView({super.key});
@@ -62,12 +59,6 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
                     position: const RelativeRect.fromLTRB(0, 0, 0, 0),
                     items: [
                       PopupMenuItem(
-                        child: const Text("Delete"),
-                        onTap: () {
-                          vm.onDeleteFolderTap(index);
-                        },
-                      ),
-                      PopupMenuItem(
                         child: const Text("Details"),
                         onTap: () {
                           showFolderFileDetailsDialog(
@@ -76,20 +67,16 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
                           );
                         },
                       ),
+                      PopupMenuItem(
+                        child: const Text("Delete"),
+                        onTap: () {
+                          vm.onDeleteTap(index);
+                        },
+                      ),
                     ],
                   );
                 },
-                onTap: () {
-                  if (ExternalStorageHandler.canOpenDirectory(
-                      vm.foldersAndFiles[index].path)) {
-                    Nav.to(
-                      FolderFileView.routeName,
-                      arguments: FolderFileViewParam(
-                        path: vm.foldersAndFiles[index].path,
-                      ),
-                    );
-                  }
-                },
+                onTap: () => vm.onFolderFileTap(index),
                 child: Column(
                   children: [
                     Expanded(

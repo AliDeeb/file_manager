@@ -94,13 +94,27 @@ class _FolderFileViewState extends State<FolderFileView> {
           ],
         ),
         body: const FolderFileContentView(),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          onPressed: vm.onAddFolderTap,
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              onPressed: vm.onAddFileTap,
+              child: const Icon(
+                Icons.file_copy,
+                color: Colors.white,
+              ),
+            ),
+            5.horizontalSpace,
+            FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              onPressed: vm.onAddFolderTap,
+              child: const Icon(
+                Icons.create_new_folder,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
       builder: (context, child) {

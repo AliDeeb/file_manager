@@ -82,7 +82,7 @@ class ExternalStorageHandler {
   static bool createFolder(String path, String folderName) {
     final folder = Directory("$path/$folderName");
     if (folder.existsSync()) {
-      showToast("folder is exist");
+      showToast("Folder is exist");
       return false;
     } else {
       try {
@@ -90,6 +90,22 @@ class ExternalStorageHandler {
         return true;
       } catch (e) {
         showToast("Error occure when trying create folder");
+        return false;
+      }
+    }
+  }
+
+  static bool createFile(String path, String fileName) {
+    final file = File("$path/$fileName");
+    if (file.existsSync()) {
+      showToast("File is exist");
+      return false;
+    } else {
+      try {
+        file.createSync();
+        return true;
+      } catch (e) {
+        showToast("Error occure when trying create file");
         return false;
       }
     }
@@ -107,6 +123,22 @@ class ExternalStorageHandler {
       }
     } catch (e) {
       showToast("Error occure when trying delete folder");
+      return false;
+    }
+  }
+
+  static bool deleteFile(String path) {
+    try {
+      final file = File(path);
+      try {
+        file.deleteSync();
+        return true;
+      } catch (e) {
+        showToast("Error occure when trying delete file");
+        return false;
+      }
+    } catch (e) {
+      showToast("Error occure when trying delete file");
       return false;
     }
   }

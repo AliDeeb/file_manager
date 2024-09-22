@@ -23,7 +23,7 @@ class HomeViewModel extends BaseViewModel<HomeViewParam> {
   }
 
   void onAddFolderTap() async {
-    final folderName = await showEnterNameDialog();
+    final folderName = await showEnterNameDialog("Enter folder name:");
     if (folderName != null) {
       final success = ExternalStorageHandler.createFolder(
         ExternalStorageHandler.rootPath!,

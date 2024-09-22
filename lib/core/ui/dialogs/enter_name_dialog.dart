@@ -5,15 +5,16 @@ import '../../common/app_config.dart';
 import '../../navigation/nav.dart';
 import '../../theme/text_theme_styles.dart';
 
-Future<String?> showEnterNameDialog() {
+Future<String?> showEnterNameDialog(String title) {
   return showDialog<String?>(
     context: AppConfig.appNavigatorKey.currentContext!,
-    builder: (context) => const EnterNameDialog(),
+    builder: (context) => EnterNameDialog(title: title),
   );
 }
 
 class EnterNameDialog extends StatefulWidget {
-  const EnterNameDialog({super.key});
+  const EnterNameDialog({super.key, required this.title});
+  final String title;
 
   @override
   State<EnterNameDialog> createState() => _EnterNameDialogState();
@@ -34,7 +35,7 @@ class _EnterNameDialogState extends State<EnterNameDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Enter folder name:",
+                widget.title,
                 style: TextThemeStyles.text_18_Regular.copyWith(
                   color: Colors.black,
                 ),
