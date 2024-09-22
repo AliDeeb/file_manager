@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/constants/enum/filter_types.dart';
+import '../../../../core/constants/enum/sort_types.dart';
 import '../../../../core/ui/screens/base_view.dart';
 import '../../../../core/ui/widgets/custom_scaffold.dart';
 import '../../view_model/folder_file_view_model.dart';
@@ -36,7 +39,60 @@ class _FolderFileViewState extends State<FolderFileView> {
     return ChangeNotifierProvider.value(
       value: vm,
       child: CustomScaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            PopupMenuButton<FilterTypes>(
+              onSelected: vm.onFilterSelected,
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem(
+                    value: FilterTypes.images,
+                    child: Text("Images"),
+                  ),
+                  const PopupMenuItem(
+                    value: FilterTypes.textFiles,
+                    child: Text("Text Files"),
+                  ),
+                ];
+              },
+              child: const Icon(Icons.filter_alt_sharp),
+            ),
+            20.horizontalSpace,
+            PopupMenuButton<SortTypes>(
+              onSelected: vm.onSortSelected,
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem(
+                    value: SortTypes.nameAToZ,
+                    child: Text("Name(A-Z)"),
+                  ),
+                  const PopupMenuItem(
+                    value: SortTypes.nameZToA,
+                    child: Text("Name(Z-A)"),
+                  ),
+                  const PopupMenuItem(
+                    value: SortTypes.sizeSToL,
+                    child: Text("Size(Small to Large)"),
+                  ),
+                  const PopupMenuItem(
+                    value: SortTypes.sizeLToS,
+                    child: Text("Size(Large to Small)"),
+                  ),
+                  const PopupMenuItem(
+                    value: SortTypes.dateModifiedNewToOld,
+                    child: Text("Date modified(New to Old)"),
+                  ),
+                  const PopupMenuItem(
+                    value: SortTypes.dateModifiedOldToNew,
+                    child: Text("Date modified(Old to New)"),
+                  ),
+                ];
+              },
+              child: const Icon(Icons.sort),
+            ),
+            20.horizontalSpace,
+          ],
+        ),
         body: const FolderFileContentView(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,

@@ -6,7 +6,7 @@ import '../../../../core/common/external_storage_handler.dart';
 import '../../../../core/ui/screens/base_view.dart';
 import '../../../../core/ui/widgets/custom_scaffold.dart';
 import '../../view_model/home_view_model.dart';
-import 'home_content_view.dart';
+import '../folder_file/folder_file_view.dart';
 
 class HomeViewParam {}
 
@@ -46,7 +46,11 @@ class _HomeViewState extends State<HomeView> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return snapshot.data != null
-                      ? const HomeContentView()
+                      ? FolderFileView(
+                          param: FolderFileViewParam(
+                            path: ExternalStorageHandler.rootPath!,
+                          ),
+                        )
                       : const Center(child: Text("permission denied"));
                 } else {
                   return const Center(child: CircularProgressIndicator());
