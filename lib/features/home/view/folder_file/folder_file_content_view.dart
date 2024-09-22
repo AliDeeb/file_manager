@@ -25,6 +25,8 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FolderFileViewModel>();
+
     return Column(
       children: [
         Padding(
@@ -46,7 +48,8 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
               mainAxisSpacing: 10,
             ),
             itemBuilder: (context, index) {
-              return InkWell(
+              return GestureDetector(
+                onLongPress: () => vm.onDeleteFolderTap(index),
                 onTap: () {
                   if (ExternalStorageHandler.canOpenDirectory(
                       vm.foldersAndFiles[index].path)) {

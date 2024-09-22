@@ -5,12 +5,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../navigation/nav.dart';
+import '../ui/show_toast.dart';
 import 'app_config.dart';
 
 class ExternalStorageHandler {
   static String? _rootPath;
 
-  String? get rootPath => _rootPath;
+  static String? get rootPath => _rootPath;
 
   static Future<bool> requestStoragePermssion() async {
     return await Permission.storage.request().isGranted;
@@ -74,6 +75,38 @@ class ExternalStorageHandler {
       Directory(path).listSync();
       return true;
     } catch (e) {
+      return false;
+    }
+  }
+
+  static bool createFolder(String path, String folderName) {
+    final folder = Directory("$path/$folderName");
+    if (folder.existsSync()) {
+      showToast("folder is exist");
+      return false;
+    } else {
+      try {
+        folder.createSync();
+        return true;
+      } catch (e) {
+        showToast("Error occure when trying create folder");
+        return false;
+      }
+    }
+  }
+
+  static bool deleteFolder(String path) {
+    try {
+      final folder = Directory(path);
+      try {
+        folder.deleteSync();
+        return true;
+      } catch (e) {
+        showToast("Error occure when trying delete folder");
+        return false;
+      }
+    } catch (e) {
+      showToast("Error occure when trying delete folder");
       return false;
     }
   }

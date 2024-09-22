@@ -38,6 +38,14 @@ class _FolderFileViewState extends State<FolderFileView> {
       child: CustomScaffold(
         appBar: AppBar(),
         body: const FolderFileContentView(),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor,
+          onPressed: vm.onAddFolderTap,
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+        ),
       ),
       builder: (context, child) {
         context.select<FolderFileViewModel, bool>((p) => p.isLoading);

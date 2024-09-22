@@ -34,23 +34,27 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: vm,
-      child: CustomScaffold(
-        body: FutureBuilder<String?>(
-          future: future,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return snapshot.data != null
-                  ? const HomeContentView()
-                  : const Center(child: Text("permission denied"));
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        ),
-      ),
       builder: (context, child) {
         context.select<HomeViewModel, bool>((p) => p.isLoading);
-        return ModalProgressHUD(inAsyncCall: vm.isLoading, child: child!);
+        context.select<HomeViewModel, GlobalKey>((p) => p.scaffoldKey);
+        return ModalProgressHUD(
+          inAsyncCall: vm.isLoading,
+          child: CustomScaffold(
+            key: vm.scaffoldKey,
+            body: FutureBuilder<String?>(
+              future: future,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return snapshot.data != null
+                      ? const HomeContentView()
+                      : const Center(child: Text("permission denied"));
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
+        );
       },
     );
   }

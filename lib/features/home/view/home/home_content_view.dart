@@ -37,7 +37,8 @@ class _HomeContentViewState extends State<HomeContentView> {
           mainAxisSpacing: 10,
         ),
         itemBuilder: (context, index) {
-          return InkWell(
+          return GestureDetector(
+            onLongPress: () => vm.onDeleteFolderTap(index),
             onTap: () {
               if (ExternalStorageHandler.canOpenDirectory(
                   vm.rootFoldersAndFiles[index].path)) {
@@ -68,7 +69,7 @@ class _HomeContentViewState extends State<HomeContentView> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {},
+        onPressed: vm.onAddFolderTap,
         child: const Icon(
           Icons.add,
           color: Colors.white,
