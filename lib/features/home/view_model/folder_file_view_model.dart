@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+
 import '../../../core/common/external_storage_handler.dart';
 import '../../../core/common/view_model/base_view_model.dart';
 import '../../../core/constants/enum/filter_types.dart';
@@ -15,6 +17,7 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
     foldersAndFilesCopy = [...foldersAndFiles];
   }
 
+  final searchFocusNode = FocusNode();
   List<FileSystemEntity> foldersAndFiles = [];
   List<FileSystemEntity> foldersAndFilesCopy = [];
   FilterTypes? _selectedFilter;
@@ -169,8 +172,18 @@ class FolderFileViewModel extends BaseViewModel<FolderFileViewParam> {
     }
   }
 
+  void onSearch(String v) {
+    foldersAndFiles = [...foldersAndFilesCopy];
+    foldersAndFiles = foldersAndFiles
+        .where((e) =>
+            e.path.split("/").last.toLowerCase().contains(v.toLowerCase()))
+        .toList();
+    notifyListeners();
+  }
+
   @override
   void closeModel() {
+    searchFocusNode.dispose();
     dispose();
   }
 }

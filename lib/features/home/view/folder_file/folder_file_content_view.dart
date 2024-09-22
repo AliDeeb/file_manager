@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/text_theme_styles.dart';
@@ -35,6 +36,27 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
             "Path: ${vm.param.path}",
             style: TextThemeStyles.text_12_Regular.copyWith(
               color: Colors.black,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5.w),
+          child: TextField(
+            focusNode: vm.searchFocusNode,
+            onChanged: vm.onSearch,
+            style: TextThemeStyles.text_14_Regular,
+            decoration: InputDecoration(
+              isCollapsed: true,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 10.w,
+                vertical: 20.h,
+              ),
+              hintStyle: TextThemeStyles.text_14_Regular.copyWith(
+                color: Colors.grey,
+              ),
+              hintText: "Search",
+              enabledBorder: const OutlineInputBorder(),
+              focusedBorder: const OutlineInputBorder(),
             ),
           ),
         ),
@@ -91,7 +113,10 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
                       ],
                     );
                   },
-                  onTap: () => vm.onFolderFileTap(index),
+                  onTap: () {
+                    vm.searchFocusNode.unfocus();
+                    vm.onFolderFileTap(index);
+                  },
                   child: Column(
                     children: [
                       Expanded(
