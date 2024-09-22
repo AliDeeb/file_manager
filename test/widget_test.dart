@@ -5,25 +5,34 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:file_manager/app.dart';
-import 'package:flutter/material.dart';
+import 'package:file_manager/core/common/external_storage_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const App());
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  group("Create and delete folder/file", () {
+    test("Create file", () async {
+      final isSuccess =
+          ExternalStorageHandler.createFile("./test", "test2.txt");
+      expect(isSuccess, true);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test("Create folder", () async {
+      final isSuccess =
+          ExternalStorageHandler.createFolder("./test", "folderTest");
+      expect(isSuccess, true);
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test("Delete file", () async {
+      final isSuccess = ExternalStorageHandler.deleteFile("./test/test2.txt");
+      expect(isSuccess, true);
+    });
+
+    test("Delete folder", () async {
+      final isSuccess =
+          ExternalStorageHandler.deleteFolder("./test/folderTest");
+      expect(isSuccess, true);
+    });
   });
 }
