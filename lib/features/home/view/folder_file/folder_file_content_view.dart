@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/common/external_storage_handler.dart';
 import '../../../../core/navigation/nav.dart';
 import '../../../../core/theme/text_theme_styles.dart';
+import '../../../../core/ui/dialogs/folder_file_details_dialog.dart';
 import '../../view_model/folder_file_view_model.dart';
 import 'folder_file_view.dart';
 
@@ -48,8 +51,34 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
               mainAxisSpacing: 10,
             ),
             itemBuilder: (context, index) {
+              final name = vm.foldersAndFiles[index].path.split("/").last;
+              final isFile = vm.foldersAndFiles[index].statSync().type ==
+                  FileSystemEntityType.file;
+
               return GestureDetector(
-                onLongPress: () => vm.onDeleteFolderTap(index),
+                onLongPress: () {
+                  showMenu<int>(
+                    context: context,
+                    position: const RelativeRect.fromLTRB(0, 0, 0, 0),
+                    items: [
+                      PopupMenuItem(
+                        child: const Text("Delete"),
+                        onTap: () {
+                          vm.onDeleteFolderTap(index);
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: const Text("Details"),
+                        onTap: () {
+                          showFolderFileDetailsDialog(
+                            vm.foldersAndFiles[index].statSync(),
+                            name,
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
                 onTap: () {
                   if (ExternalStorageHandler.canOpenDirectory(
                       vm.foldersAndFiles[index].path)) {
@@ -61,19 +90,36 @@ class _FolderFileContentViewState extends State<FolderFileContentView> {
                     );
                   }
                 },
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    vm.foldersAndFiles[index].path.split("/").last,
-                    style: TextThemeStyles.text_14_Regular.copyWith(
-                      color: Colors.white,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: isFile ? Colors.blueGrey : Colors.amber,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          isFile ? Icons.file_copy : Icons.folder_outlined,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        child: Text(
+                          name,
+                          style: TextThemeStyles.text_14_Regular.copyWith(
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             },
