@@ -98,6 +98,7 @@ class _FolderFileViewState extends State<FolderFileView> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
+              heroTag: "Hero_1",
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: vm.onAddFileTap,
               child: const Icon(
@@ -107,6 +108,7 @@ class _FolderFileViewState extends State<FolderFileView> {
             ),
             5.horizontalSpace,
             FloatingActionButton(
+              heroTag: "Hero_2",
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: vm.onAddFolderTap,
               child: const Icon(
